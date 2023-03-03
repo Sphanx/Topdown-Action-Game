@@ -8955,7 +8955,7 @@ MonoBehaviour:
   moveSpeed: 3
   attackCooldown: 0.6
   moveCoolDown: 0.4
-  enemyRB: {fileID: 540367000}
+  enemyRB: {fileID: 0}
   isCoolDown: 0
   attackPoint: {fileID: 1610528558}
   attackRange: 1.2
@@ -8963,8 +8963,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   playerDamage: 50
-  maxHealth: 1000
-  knockBackForce: 10
+  maxHealth: 100
+  knockBackForce: 7
+  waitmove: 1
 --- !u!61 &207271061
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9075,11 +9076,6 @@ Transform:
   m_Father: {fileID: 207271058}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &540367000 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 5688123707282538774, guid: 629f44d0e047fca4ea0051a818c498f5, type: 3}
-  m_PrefabInstance: {fileID: 474645459311299139}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1610528557
 GameObject:
   m_ObjectHideFlags: 0
@@ -9576,6 +9572,10 @@ PrefabInstance:
       propertyPath: attackDelay
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1659082267, guid: 629f44d0e047fca4ea0051a818c498f5, type: 3}
+      propertyPath: attackRange
+      value: 0.96
+      objectReference: {fileID: 0}
     - target: {fileID: 474645458806053973, guid: 629f44d0e047fca4ea0051a818c498f5, type: 3}
       propertyPath: m_Name
       value: Slime
@@ -9626,6 +9626,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 474645458806053978, guid: 629f44d0e047fca4ea0051a818c498f5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5688123707282538774, guid: 629f44d0e047fca4ea0051a818c498f5, type: 3}
+      propertyPath: m_BodyType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -39,6 +39,10 @@ public class Enemy : MonoBehaviour
             this.gameObject.GetComponent<SpriteRenderer>().flipX = false;
         }
         attackPlayer();
+        if(Input.GetKeyDown(KeyCode.O)){
+            enemyRB.AddForce(new Vector2(1,0) * knockBackForce * Time.deltaTime, ForceMode2D.Impulse);
+        }
+
     }
     public void TakeDamage(int damage){
         currentHealth -= damage;

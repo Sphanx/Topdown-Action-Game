@@ -20,6 +20,8 @@ public class playerController : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
     public float knockBackForce;
+    private bool canMove = true;
+    public float waitmove = 1f;
 
     private void Start() {
         playerRB = this.gameObject.GetComponent<Rigidbody2D>();
@@ -62,13 +64,18 @@ public class playerController : MonoBehaviour
             this.gameObject.GetComponent<SpriteRenderer>().flipX = false;
         }
         
+        if(Input.GetKeyDown(KeyCode.T)){
+            playerRB.AddForce(new Vector2(1,0) * knockBackForce * Time.deltaTime, ForceMode2D.Impulse);
+        }
 
         Attack();
 
     }
 
     private void FixedUpdate() {
-        playerRB.MovePosition(playerRB.position + movement * moveSpeed * Time.fixedDeltaTime);  
+        if(canMove){
+        playerRB.MovePosition(playerRB.position + movement * moveSpeed * Time.fixedDeltaTime); 
+        }
         //freeze player while attacking.
 
     }
@@ -116,15 +123,21 @@ public class playerController : MonoBehaviour
     
     public void TakeDamage(int damage){
         currentHealth -= damage;
+        playerAnimator.SetTrigger("getHit");
+        canMove =false;
         Collider2D detectEnemies = Physics2D.OverlapCircle(playerRB.position, attackRange, enemyLayers); 
         Vector2 forceDirection = (playerRB.position - detectEnemies.GetComponent<Rigidbody2D>().position).normalized;
-        playerRB.AddForce(forceDirection * knockBackForce * Time.deltaTime, ForceMode2D.Impulse);
-        Debug.Log(forceDirection + " " + knockBackForce + " " + detectEnemies.name);
-
+        playerRB.AddForce(forceDirection * 0.01f * knockBackForce * Time.deltaTime, ForceMode2D.Impulse);
+        StartCoroutine(waitMove(waitmove));
         if(currentHealth <= 0){
-            //Ölme animasyonu
+            playerAnimator.SetBool("isDead", true);
+            playerRB.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             this.enabled = false;
         }
         
+    }
+    IEnumerator waitMove(float time){
+        yield return new WaitForSeconds(time);
+        canMove = true;
     }
 }
