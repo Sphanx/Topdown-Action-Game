@@ -132,6 +132,7 @@ public class playerController : MonoBehaviour
         if(currentHealth <= 0){
             playerAnimator.SetBool("isDead", true);
             playerRB.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+            this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
             this.enabled = false;
         }
         
