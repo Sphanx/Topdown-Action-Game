@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private int maxHealth = 100;
+    public int maxHealth = 100;
     private int currentHealth;
     public int enemyDamage;
     public LayerMask playerLayer;
@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     private bool isCoolDown = false;
     public float attackCooldown;
     public float attackDelay;
+    public float staggerTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,7 +51,7 @@ public class Enemy : MonoBehaviour
 
         Vector2 forceDirection = (enemyRB.position - playerRB.position).normalized;
         enemyRB.AddForce(forceDirection * knockBackForce * Time.deltaTime, ForceMode2D.Impulse);
-        Debug.Log(forceDirection);
+        StartCoroutine(Stagger(staggerTime));        
 
         if(currentHealth <= 0){
             enemyAnimator.SetBool("isDead", true);
@@ -85,6 +86,11 @@ public class Enemy : MonoBehaviour
             enemyAnimator.SetTrigger("Attack");
         }
         
+    }
+    IEnumerator Stagger(float time){
+        this.enabled = false;
+        yield return new WaitForSeconds(time);
+        this.enabled = true;
     }
     
     private void OnDrawGizmos() {

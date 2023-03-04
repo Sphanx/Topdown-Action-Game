@@ -8,7 +8,6 @@ public class playerController : MonoBehaviour
     public float attackCooldown;
     public float moveCoolDown;
     private Rigidbody2D playerRB;
-    public Rigidbody2D enemyRB;
     public bool isCoolDown = false;
     Vector2 movement;
     Animator playerAnimator;
