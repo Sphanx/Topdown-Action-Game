@@ -8,12 +8,18 @@ public class spawnManager : MonoBehaviour
     private Vector3 spawnPos;
     public GameObject slimePrefab;
     float spawnPosX;
+    private int enemyCount;
+    public int numberOfEnemies;
     
     private void Start() {
         //spawnPos = Camera.main.ViewportToWorldPoint(new Vector3(1f, 1f, 10f));
-        InvokeRepeating("SpawnEnemy", 5, 2);
+
     }
     private void Update() {
+        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        if(enemyCount<= numberOfEnemies){
+        SpawnEnemy();
+        }
     }
 
     void SpawnEnemy(){

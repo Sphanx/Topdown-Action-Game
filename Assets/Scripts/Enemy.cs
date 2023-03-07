@@ -18,10 +18,13 @@ public class Enemy : MonoBehaviour
     public float attackCooldown;
     public float attackDelay;
     public float staggerTime;
+    public HealthBar healthBar;
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
+        healthBar.SetHealth(currentHealth);
+
         enemyAnimator = this.gameObject.GetComponent<Animator>();
         enemyRB = this.gameObject.GetComponent<Rigidbody2D>();
         playerRB = GameObject.Find("Player").GetComponent<Rigidbody2D>();
@@ -47,8 +50,9 @@ public class Enemy : MonoBehaviour
     }
     public void TakeDamage(int damage){
         currentHealth -= damage;
-        enemyAnimator.SetTrigger("Hurt");
+        healthBar.SetHealth(currentHealth);
 
+        enemyAnimator.SetTrigger("Hurt");
         Vector2 forceDirection = (enemyRB.position - playerRB.position).normalized;
         enemyRB.AddForce(forceDirection * knockBackForce * Time.deltaTime, ForceMode2D.Impulse);
         StartCoroutine(Stagger(staggerTime));        

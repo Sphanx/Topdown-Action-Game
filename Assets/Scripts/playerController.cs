@@ -21,13 +21,16 @@ public class playerController : MonoBehaviour
     public float knockBackForce;
     private bool canMove = true;
     public float waitmove = 1f;
+    public HealthBar healthBar;
 
     private void Start() {
         playerRB = this.gameObject.GetComponent<Rigidbody2D>();
         playerAnimator = this.gameObject.GetComponent<Animator>();
 
+        //set original contraints and health.
         originalContraints = playerRB.constraints;
         currentHealth = maxHealth;
+        healthBar.SetHealth(currentHealth);
     }
     private void Update() {
         movement.x = Input.GetAxisRaw("Horizontal");
@@ -122,12 +125,16 @@ public class playerController : MonoBehaviour
     
     public void TakeDamage(int damage){
         currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
+
         playerAnimator.SetTrigger("getHit");
-        canMove =false;
+        canMove = false;
         Collider2D detectEnemies = Physics2D.OverlapCircle(playerRB.position, attackRange, enemyLayers); 
         Vector2 forceDirection = (playerRB.position - detectEnemies.GetComponent<Rigidbody2D>().position).normalized;
         playerRB.AddForce(forceDirection * 0.01f * knockBackForce * Time.deltaTime, ForceMode2D.Impulse);
         StartCoroutine(waitMove(waitmove));
+        
+        //kill player if health is less than/equal to 0. 
         if(currentHealth <= 0){
             playerAnimator.SetBool("isDead", true);
             playerRB.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
