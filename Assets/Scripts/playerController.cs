@@ -22,6 +22,8 @@ public class playerController : MonoBehaviour
     private bool canMove = true;
     public float waitmove = 1f;
     public HealthBar healthBar;
+    public Score scoreScript;
+    private int scoreCounter;
 
     private void Start() {
         playerRB = this.gameObject.GetComponent<Rigidbody2D>();
@@ -31,6 +33,8 @@ public class playerController : MonoBehaviour
         originalContraints = playerRB.constraints;
         currentHealth = maxHealth;
         healthBar.SetHealth(currentHealth);
+
+        StartCoroutine(HealthReducer());
     }
     private void Update() {
         movement.x = Input.GetAxisRaw("Horizontal");
@@ -71,7 +75,12 @@ public class playerController : MonoBehaviour
         }
 
         Attack();
-
+        if(currentHealth <= 0){
+            KillPlayer();
+        }
+        if(currentHealth >= 100){
+            currentHealth = 100;
+        }
     }
 
     private void FixedUpdate() {
@@ -96,9 +105,13 @@ public class playerController : MonoBehaviour
 
         //Detect enemies in range of attack
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-        
         foreach(Collider2D enemy in hitEnemies){
             enemy.GetComponent<Enemy>().TakeDamage(playerDamage);
+            if(enemy.GetComponent<Enemy>().isEnemyDead){
+                currentHealth += 8;
+                scoreCounter++;
+                scoreScript.SetScore(scoreCounter);
+            }
         }
         
         }
@@ -135,13 +148,22 @@ public class playerController : MonoBehaviour
         StartCoroutine(waitMove(waitmove));
         
         //kill player if health is less than/equal to 0. 
-        if(currentHealth <= 0){
-            playerAnimator.SetBool("isDead", true);
-            playerRB.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-            this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            this.enabled = false;
-        }
         
+    }
+
+    private void KillPlayer(){
+        playerAnimator.SetBool("isDead", true);
+        playerRB.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+        this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        this.enabled = false;
+    }
+    IEnumerator HealthReducer(){
+        while(true){
+        yield return new WaitForSeconds(0.4f);
+        currentHealth -=1;
+        healthBar.SetHealth(currentHealth);
+
+        }
     }
     IEnumerator waitMove(float time){
         yield return new WaitForSeconds(time);

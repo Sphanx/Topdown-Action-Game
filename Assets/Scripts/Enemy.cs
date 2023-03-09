@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     public float attackDelay;
     public float staggerTime;
     public HealthBar healthBar;
+    public bool isEnemyDead = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +59,7 @@ public class Enemy : MonoBehaviour
         StartCoroutine(Stagger(staggerTime));        
 
         if(currentHealth <= 0){
+            isEnemyDead = true;
             enemyAnimator.SetBool("isDead", true);
             this.enabled = false;
         }
