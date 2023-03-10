@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameOverButtonController : MonoBehaviour
+public class GameOverController : MonoBehaviour
 {
     private Scene scene;
-    private void Awake() {
+
+    public void GameOver(){
+        gameObject.SetActive(true);
         scene = SceneManager.GetActiveScene();
     }
-    private void RestartLevel(){
+    public void RestartLevel(){
         SceneManager.LoadScene(scene.buildIndex);
+        Debug.Log("yeniden başladı");
     }
 }

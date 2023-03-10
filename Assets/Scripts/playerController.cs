@@ -24,6 +24,7 @@ public class playerController : MonoBehaviour
     public HealthBar healthBar;
     public Score scoreScript;
     private int scoreCounter;
+    public bool isPlayerDead = false;
 
     private void Start() {
         playerRB = this.gameObject.GetComponent<Rigidbody2D>();
@@ -76,6 +77,7 @@ public class playerController : MonoBehaviour
 
         Attack();
         if(currentHealth <= 0){
+            isPlayerDead = true;
             KillPlayer();
         }
         if(currentHealth >= 100){
